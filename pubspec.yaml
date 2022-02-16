@@ -36,7 +36,10 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   http: ^0.13.4
-  get: ^4.6.1
+  get:
+    git:
+      url: git@github.com:jonataslaw/getx.git
+      ref: master
   animations: ^2.0.0
   google_fonts: ^2.0.0
   json_annotation: 4.4.0

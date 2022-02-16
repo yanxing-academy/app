@@ -1,5 +1,12 @@
 class Author {
+  final String id;
+  final String fullname;
+  final String intro;
 
+  Author(this.id, this.fullname, this.intro);
+
+  Author.fromJSON(Map<String, dynamic> json):
+      id = json['id'], fullname = json['fullname'], intro = json['intro'];
 }
 
 class Mat {
@@ -8,6 +15,7 @@ class Mat {
   final String intro;
   final String content;
   late final String author;
+  late final String aid;
   /*
   final int kind;
   final int format;
@@ -18,14 +26,16 @@ class Mat {
   final List<Author> authors;
   */
 
-  Mat(this.id, this.title, this.intro, this.content, this.author);
+  Mat(this.id, this.title, this.intro, this.content, this.author, this.aid);
 
   Mat.fromJSON(Map<String, dynamic> json): id = json['id'], title = json['title'], intro = json['intro'], content = json['content'] {
     var authors = json['authors'];
     if (authors != null) {
       author = [for (var a in authors) a['fullname']].join(',');
+      aid =  [for (var a in authors) a['id']].join(',');
     } else {
       author = '';
+      aid = '';
     }
   }
 }

@@ -1,1 +1,1 @@
-const NAV_CONTENT = 1;
+const NAV_CONTENT = "content";
