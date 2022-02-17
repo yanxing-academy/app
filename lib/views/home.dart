@@ -134,6 +134,9 @@ class HomeView extends GetView<HomeController> {
       case 2:
         delegate.toNamed(Routes.PROFILE);
         break;
+      case 3:
+        delegate.toNamed(Routes.SETTINGS);
+        break;
       default:
         break;
     }

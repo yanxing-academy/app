@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:collection/collection.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yanxing_app/main.dart';
@@ -9,6 +11,12 @@ import '../routes.dart';
 
 class MatController extends GetxController {
   var mat = Mat("", "", "", "", "", "").obs;
+
+  var lineSelectd = 0.obs;
+
+  void selectLine(int index) {
+    lineSelectd(index);
+  }
 }
 
 class MatBinding extends Binding {
@@ -32,7 +40,7 @@ class MatCard extends GetView<MatController> {
     return Card(
       color: const Color(0xFFFBFBFB),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(0),
+        borderRadius: BorderRadius.circular(10),
       ),
       shadowColor: const Color(0xFFE6E6E6),
       child: Padding(
@@ -116,7 +124,8 @@ class MatDetailView extends GetView<MatController> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(height: 80),
+                    const SizedBox(height: 80),
+                    // 素材标题
                     SelectableText(mat.title,
                         style: Get.textTheme.headline3?.copyWith(fontSize: 40)),
                     isWideScreen
@@ -124,11 +133,8 @@ class MatDetailView extends GetView<MatController> {
                         : ElevatedButton(
                             onPressed: () => showNotesSheet(context),
                             child: const Text("查看笔记")),
-                    SelectableText(
-                      mat.content,
-                      style: Get.textTheme.headline4?.copyWith(
-                          height: 2, fontSize: 24, fontWeight: FontWeight.w500),
-                    ),
+                    // 素材内容
+                    buildMatContentView(),
                   ],
                 ),
               ),
@@ -150,9 +156,39 @@ class MatDetailView extends GetView<MatController> {
     );
   }
 
+  Widget buildMatContentView() {
+    var lines = mat.content.split('\n');
+    var style = Get.textTheme.headline4
+        ?.copyWith(height: 2, fontSize: 24, fontWeight: FontWeight.w500);
+    var selectedStyle =
+        style?.copyWith(color: Colors.blue, fontWeight: FontWeight.w800);
+    return Obx(() {
+      return SelectableText.rich(TextSpan(
+        children: lines.mapIndexed((index, ln) {
+          final linenum = index + 1;
+          return TextSpan(
+            text: '$ln\n',
+            style:
+                controller.lineSelectd.value == linenum ? selectedStyle : style,
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                selectSentence(linenum, ln);
+              },
+            mouseCursor: SystemMouseCursors.click,
+          );
+        }).toList(),
+      ));
+    });
+  }
+
   void showNotesSheet(BuildContext context) {
     showModalBottomSheet(
         context: context, builder: (context) => const NotesView());
+  }
+
+  void selectSentence(int index, String line) {
+    log("selecting line: $index:$line");
+    controller.selectLine(index);
   }
 }
 
@@ -172,7 +208,44 @@ class NotesView extends StatelessWidget {
           IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))
         ],
       ),
-      body: const Center(child: Text("notes")),
+      body: Center(
+          child: Column(
+        children: [
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: 'Single tap',
+                  style: TextStyle(color: Colors.red[300]),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      log("single tap");
+                      // Single tapped.
+                    },
+                ),
+                TextSpan(
+                    text: ' Double tap',
+                    style: TextStyle(color: Colors.green[300]),
+                    recognizer: DoubleTapGestureRecognizer()
+                      ..onDoubleTap = () {
+                        log("double tap");
+                        // Double tapped.
+                      }),
+                TextSpan(
+                  text: ' Long press',
+                  style: TextStyle(color: Colors.blue[300]),
+                  recognizer: LongPressGestureRecognizer()
+                    ..onLongPress = () {
+                      log("long press");
+                      // Long Pressed.
+                    },
+                ),
+              ],
+            ),
+          ),
+          const Text("notes"),
+        ],
+      )),
     );
   }
 }

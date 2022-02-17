@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'dart:async';
 
 class StudyController extends GetxController {
   final now = DateTime.now().obs;
@@ -9,7 +10,7 @@ class StudyController extends GetxController {
     super.onReady();
     Timer.periodic(
       Duration(seconds: 1),
-          (timer) {
+      (timer) {
         now.value = DateTime.now();
       },
     );
@@ -21,12 +22,11 @@ class StudyBinding extends Binding {
   List<Bind> dependencies() {
     return [
       Bind.lazyPut<StudyController>(
-            () => StudyController(),
+        () => StudyController(),
       )
     ];
   }
 }
-
 
 class StudyView extends GetView<StudyController> {
   const StudyView({Key? key}) : super(key: key);
@@ -34,13 +34,14 @@ class StudyView extends GetView<StudyController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.yellow,
       body: Center(
         child: Obx(
-              () => Column(
+          () => Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               const Text(
-                'DashboardView is working',
+                '学习模块正在开发中....',
                 style: TextStyle(fontSize: 20),
               ),
               Text('Time: ${controller.now.value.toString()}'),

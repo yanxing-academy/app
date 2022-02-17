@@ -5,6 +5,7 @@ class Paths {
   static const LIBRARY = '/library';
   static const VIEW_MAT = '/mat/view';
   static const VIEW_AUTHOR = '/author/view';
+  static const SETTINGS = '/settings';
 }
 
 class Routes {
@@ -14,6 +15,7 @@ class Routes {
   static const LIBRARY = Paths.HOME + Paths.LIBRARY;
   static const VIEW_MAT = Paths.HOME + Paths.VIEW_MAT;
   static const VIEW_AUTHOR = Paths.HOME + Paths.VIEW_AUTHOR;
+  static const SETTINGS = Paths.HOME + Paths.SETTINGS;
 
   static String VIEW_AUTHOR_DETAIL(String aid) => '$VIEW_AUTHOR/$aid';
 }

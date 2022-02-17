@@ -14,6 +14,7 @@ import 'views/home.dart';
 import 'views/mat.dart';
 import 'views/profile.dart';
 import 'views/root.dart';
+import 'views/settings.dart';
 import 'views/study.dart';
 
 void main() {
@@ -61,9 +62,14 @@ void main() {
                   ),
                   GetPage(
                     name: Paths.VIEW_AUTHOR + '/:aid',
-                    page: () => AuthorDetailView(),
+                    page: () => const AuthorDetailView(),
                     bindings: [AuthorBinding()],
-                  )
+                  ),
+                  GetPage(
+                    name: Paths.SETTINGS,
+                    page: () => const SettingsView(),
+                    bindings: [SettingsBinding()],
+                  ),
                 ]),
           ],
         ),

@@ -10,7 +10,7 @@ class ProfileBinding extends Binding {
   List<Bind> dependencies() {
     return [
       Bind.lazyPut<ProfileController>(
-            () => ProfileController(),
+        () => ProfileController(),
       )
     ];
   }
@@ -25,16 +25,16 @@ class ProfileView extends GetView<ProfileController> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              'ProfileView is working',
+            const Text(
+              '"我的主页"模块正在开发中...',
               style: TextStyle(fontSize: 20),
             ),
-            Hero(
+            const Hero(
               tag: 'heroLogo',
-              child: const FlutterLogo(),
+              child: FlutterLogo(),
             ),
             MaterialButton(
-              child: Text('Show a test dialog'),
+              child: const Text('Show a test dialog'),
               onPressed: () {
                 //shows a dialog
                 Get.defaultDialog(
@@ -44,7 +44,7 @@ class ProfileView extends GetView<ProfileController> {
               },
             ),
             MaterialButton(
-              child: Text('Show a test dialog in Home router outlet'),
+              child: const Text('Show a test dialog in Home router outlet'),
               onPressed: () {
                 //shows a dialog
 

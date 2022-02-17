@@ -42,7 +42,8 @@ dependencies:
       ref: master
   animations: ^2.0.0
   google_fonts: ^2.0.0
-  json_annotation: 4.4.0
+  json_annotation: ^4.4.0
+  collection: ^1.15.0
 
 dev_dependencies:
   flutter_test:
