@@ -3,17 +3,18 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:yanxing_app/models/mat.dart';
 import 'package:yanxing_app/routes.dart';
-import 'package:http/http.dart' as http;
+import 'package:yanxing_app/views/author.dart';
 import 'package:yanxing_app/views/library.dart';
 
 import 'themes/theme_data.dart';
-import 'views/study.dart';
 import 'views/home.dart';
 import 'views/mat.dart';
 import 'views/profile.dart';
 import 'views/root.dart';
+import 'views/study.dart';
 
 void main() {
   runApp(
@@ -41,7 +42,7 @@ void main() {
                   GetPage(
                     name: Paths.STUDY,
                     page: () => const StudyView(),
-                    bindings: [ StudyBinding()],
+                    bindings: [StudyBinding()],
                   ),
                   GetPage(
                     name: Paths.LIBRARY,
@@ -57,6 +58,11 @@ void main() {
                     name: Paths.VIEW_MAT,
                     page: () => MatDetailView(Get.arguments as Mat),
                     bindings: [MatBinding()],
+                  ),
+                  GetPage(
+                    name: Paths.VIEW_AUTHOR + '/:aid',
+                    page: () => AuthorDetailView(),
+                    bindings: [AuthorBinding()],
                   )
                 ]),
           ],
@@ -100,88 +106,28 @@ class MainController extends GetxController {
       throw Exception('Failed to load books');
     }
   }
-
-  Future<void> fetchAuthor(String aid) async {
-    log("fetching author info for $aid...");
-    var url = "http://$host/api/v1/people/get/$aid";
-    final resp = await http.get(Uri.parse(url));
-    if (resp.statusCode == 200) {
-      final js = jsonDecode(resp.body);
-      author = Author.fromJSON(js);
-      update();
-    } else {
-      throw Exception('Failed to load author');
-    }
-  }
-
-  void changeMenuIdx(int idx) {
-    menuIdx = idx;
-    update();
-  }
 }
 
-/*
+class PlatformController extends GetxController {
+  static PlatformController get to => PlatformController();
 
-class YanxingApp extends StatelessWidget {
-  const YanxingApp({Key? key}) : super(key: key);
+  static bool isNarrowScreen(BuildContext context) {
+    return context.width / context.height < 0.8;
+  }
+
+  static bool isWideScreen(BuildContext context) {
+    return context.width / context.height > 1.3;
+  }
+
+  String _host = "localhost:8080";
+
+  get host => _host;
 
   @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: "衍星书院",
-      theme: YanxingThemeData.lightThemeData,
-      darkTheme: YanxingThemeData.darkThemeData,
-      home: GetBuilder(
-        init: MainController(),
-        builder: (_) => Scaffold(
-          body: Row(
-            children: [
-              LayoutBuilder(builder: (context, constraints) {
-                return Container(
-                  color: Theme.of(context).navigationRailTheme.backgroundColor,
-                  child: SingleChildScrollView(
-                    clipBehavior: Clip.antiAlias,
-                    child: ConstrainedBox(
-                      constraints:
-                          BoxConstraints(minHeight: constraints.maxHeight),
-                      child: IntrinsicHeight(
-                        child: NavigationRail(
-                          destinations: const [
-                            NavigationRailDestination(
-                                icon: Icon(Icons.home), label: Text('主页')),
-                            NavigationRailDestination(
-                                icon: Icon(Icons.star), label: Text('收藏')),
-                            NavigationRailDestination(
-                                icon: Icon(Icons.search), label: Text('搜索')),
-                          ],
-                          selectedIndex: MainController.to.menuIdx,
-                          onDestinationSelected: (int idx) {
-                            Get.find<MainController>().changeMenuIdx(idx);
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              }),
-              const VerticalDivider(
-                thickness: 1,
-                width: 1,
-              ),
-              const Expanded(
-                child: Center(
-                  child: Library(),
-                  // child: ConstrainedBox(
-                  //   constraints: const BoxConstraints(maxWidth: 1340),
-                  // child: mainViewByMenuIdx(MainController.to.menuIdx),
-                  // ),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+  void onInit() {
+    if (GetPlatform.isAndroid) {
+      _host = "10.0.2.2:8080";
+    }
+    super.onInit();
   }
 }
-*/

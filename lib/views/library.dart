@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:yanxing_app/models/mat.dart';
+import 'package:http/http.dart' as http;
 
+import '../models/mat.dart';
 import 'mat.dart';
 
 class LibraryController extends GetxController {
@@ -26,7 +26,10 @@ class LibraryController extends GetxController {
   void fetchBooks() async {
     log("fetching books...");
     var url = "http://$host/api/v1/mats/search?limit=9&offset=0&o=t&k=6";
-    final resp = await http.get(Uri.parse(url));
+    final resp = await http.get(
+      Uri.parse(url),
+      headers: {"Access-Control-Allow-Origin": "*"},
+    );
 
     if (resp.statusCode == 200) {
       final js = jsonDecode(resp.body);
@@ -95,7 +98,7 @@ class LibraryView extends GetView<LibraryController> {
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
-                maxCrossAxisExtent: GetPlatform.isDesktop ? 500 : 300,
+                maxCrossAxisExtent: GetPlatform.isDesktop ? 400 : 300,
                 childAspectRatio: 1 / 0.8,
                 children: [for (var m in controller.mats) MatCard(m)],
               )),

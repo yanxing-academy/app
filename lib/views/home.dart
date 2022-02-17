@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:yanxing_app/main.dart';
 
 import '../routes.dart';
 
@@ -35,7 +36,7 @@ class HomeView extends GetView<HomeController> {
 
         log("width: ${context.width} / height: ${context.height}");
 
-        if (context.width / context.height > 0.8) {
+        if (!PlatformController.isNarrowScreen(context)) {
           return Scaffold(
             body: Row(
               children: [
@@ -58,6 +59,9 @@ class HomeView extends GetView<HomeController> {
                                   icon: Icon(Icons.school), label: Text('学习')),
                               NavigationRailDestination(
                                   icon: Icon(Icons.face), label: Text('我')),
+                              NavigationRailDestination(
+                                  icon: Icon(Icons.settings),
+                                  label: Text('选项')),
                             ],
                             selectedIndex: currentIndex,
                             onDestinationSelected: (idx) =>
