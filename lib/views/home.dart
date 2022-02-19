@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yanxing_app/main.dart';
+import 'package:yanxing_app/themes/theme_data.dart';
 
 import '../routes.dart';
 
@@ -33,6 +34,9 @@ class HomeView extends GetView<HomeController> {
         if (currentLocation.startsWith(Routes.PROFILE) == true) {
           currentIndex = 2;
         }
+        if (currentLocation.startsWith(Routes.SETTINGS) == true) {
+          currentIndex = 3;
+        }
 
         log("width: ${context.width} / height: ${context.height}");
 
@@ -51,6 +55,12 @@ class HomeView extends GetView<HomeController> {
                             BoxConstraints(minHeight: constraints.maxHeight),
                         child: IntrinsicHeight(
                           child: NavigationRail(
+                            // labelType: NavigationRailLabelType.selected,
+                            selectedIconTheme: const IconThemeData().copyWith(
+                                color: YanxingThemeData.yanxingBlue20,
+                                size: 28),
+                            unselectedIconTheme: const IconThemeData()
+                                .copyWith(color: YanxingThemeData.yanxingBlue9),
                             destinations: const [
                               NavigationRailDestination(
                                   icon: Icon(Icons.collections_bookmark),
@@ -72,10 +82,7 @@ class HomeView extends GetView<HomeController> {
                     ),
                   );
                 }),
-                const VerticalDivider(
-                  thickness: 1,
-                  width: 1,
-                ),
+                // const VerticalDivider(thickness: 1, width: 1),
                 Expanded(
                   child: Center(
                     child: GetRouterOutlet(
@@ -100,6 +107,8 @@ class HomeView extends GetView<HomeController> {
             ),
             bottomNavigationBar: BottomNavigationBar(
               currentIndex: currentIndex,
+              selectedItemColor: YanxingThemeData.yanxingBlue20,
+              unselectedItemColor: YanxingThemeData.yanxingBlue9,
               onTap: (idx) => onIndexChanged(idx, context),
               items: const [
                 BottomNavigationBarItem(

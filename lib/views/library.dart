@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/mat.dart';
+import '../themes/theme_data.dart';
 import 'mat.dart';
 
 class LibraryController extends GetxController {
@@ -75,39 +76,27 @@ class LibraryView extends GetView<LibraryController> {
   Widget build(BuildContext context) {
     return Scaffold(
       // backgroundColor: const Color(0xFFEEEEEE),
-      backgroundColor: const Color(0xFFECF5FF),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
-            child: Row(children: [
-              const Icon(Icons.book),
-              Expanded(
-                child: Text(
-                  "图书馆",
-                  style: Get.textTheme.headline6,
-                ),
-              ),
-              const Icon(Icons.search),
-              const SizedBox(
-                width: 10,
-              ),
-              const Icon(Icons.sort),
-            ]),
-          ),
-          Expanded(
-            child: Obx(() => GridView.extent(
-                  primary: false,
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  maxCrossAxisExtent: GetPlatform.isDesktop ? 400 : 300,
-                  childAspectRatio: 1 / 0.8,
-                  children: [for (var m in controller.mats) MatCard(m)],
-                )),
-          ),
+      // backgroundColor: const Color(0xFFECF5FF),
+      backgroundColor: YanxingThemeData.yanxingBlue2,
+      appBar: AppBar(
+        // leading: const Icon(Icons.collections_bookmark),
+        title: const Text('书馆'),
+        actions: [
+          const Icon(Icons.search),
+          const SizedBox(width: 10),
+          IconButton(icon: const Icon(Icons.sort), onPressed: () {}),
+          const SizedBox(width: 10),
         ],
       ),
+      body: Obx(() => GridView.extent(
+            primary: false,
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            maxCrossAxisExtent: GetPlatform.isDesktop ? 400 : 300,
+            childAspectRatio: 1 / 0.8,
+            children: [for (var m in controller.mats) MatCard(m)],
+          )),
     );
   }
 }

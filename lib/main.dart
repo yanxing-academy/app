@@ -1,10 +1,5 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-import 'package:yanxing_app/models/mat.dart';
 import 'package:yanxing_app/routes.dart';
 import 'package:yanxing_app/views/author.dart';
 import 'package:yanxing_app/views/library.dart';
@@ -57,7 +52,7 @@ void main() {
                   ),
                   GetPage(
                     name: Paths.VIEW_MAT,
-                    page: () => MatDetailView(Get.arguments as Mat),
+                    page: () => const MatDetailView(),
                     bindings: [MatBinding()],
                   ),
                   GetPage(
@@ -78,6 +73,7 @@ void main() {
   );
 }
 
+/*
 class MainController extends GetxController {
   static MainController get to => Get.find();
   String host = "localhost:8080";
@@ -113,6 +109,7 @@ class MainController extends GetxController {
     }
   }
 }
+*/
 
 class PlatformController extends GetxController {
   static PlatformController get to => PlatformController();
