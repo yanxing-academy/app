@@ -1,4 +1,5 @@
 class Paths {
+  static const LOGIN = '/login';
   static const HOME = '/home';
   static const PROFILE = '/profile';
   static const STUDY = '/study';
@@ -9,6 +10,7 @@ class Paths {
 }
 
 class Routes {
+  static const LOGIN = Paths.LOGIN;
   static const HOME = Paths.HOME;
   static const PROFILE = Paths.HOME + Paths.PROFILE;
   static const STUDY = Paths.HOME + Paths.STUDY;

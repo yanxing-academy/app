@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../routes.dart';
+import 'package:yanxing_app/routes.dart';
 
 class ProfileController extends GetxController {}
 
@@ -17,6 +16,8 @@ class ProfileBinding extends Binding {
 }
 
 class ProfileView extends GetView<ProfileController> {
+  const ProfileView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,34 +28,12 @@ class ProfileView extends GetView<ProfileController> {
           children: [
             const Text(
               '"我的主页"模块正在开发中...',
-              style: TextStyle(fontSize: 20),
             ),
-            const Hero(
-              tag: 'heroLogo',
-              child: FlutterLogo(),
-            ),
-            MaterialButton(
-              child: const Text('Show a test dialog'),
+            TextButton(
               onPressed: () {
-                //shows a dialog
-                Get.defaultDialog(
-                  title: 'Test Dialog !!',
-                  barrierDismissible: true,
-                );
+                context.navigation.toNamed(Paths.LOGIN);
               },
-            ),
-            MaterialButton(
-              child: const Text('Show a test dialog in Home router outlet'),
-              onPressed: () {
-                //shows a dialog
-
-                Get.defaultDialog(
-                  title: 'Test Dialog In Home Outlet !!',
-                  barrierDismissible: true,
-                  id: Routes.HOME,
-                  // navigatorKey: Get.nestedKey(Routes.HOME),
-                );
-              },
+              child: const Text("登录"),
             )
           ],
         ),

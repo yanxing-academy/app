@@ -5,10 +5,11 @@ import 'package:collection/collection.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:yanxing_app/main.dart';
 import 'package:yanxing_app/models/mat.dart';
 import 'package:yanxing_app/themes/theme_data.dart';
+import 'package:yanxing_app/utils/http.dart';
+import 'package:yanxing_app/widgets/StickyFab.dart';
 
 import '../models/note.dart';
 import '../routes.dart';
@@ -34,14 +35,12 @@ class MatController extends GetxController {
     final host = PlatformController.to.host;
     final mid = mat.value.id;
     // TODO: implement scope
-    var url = "http://$host/api/v1/notes/list/card?mid=$mid&scope=4";
+    var url = 'http://$host/api/v1/notes/list/cards?mid=$mid&scope=4';
     log("fetching notes for mat: ${mat.value.title}, from url: $url");
-    final resp = await http.get(
-      Uri.parse(url),
-      headers: {"Access-Control-Allow-Origin": "*"},
-    );
+    final resp = await httpGet(url);
 
     if (resp.statusCode == 200) {
+      notes.clear();
       final js = jsonDecode(resp.body);
       for (var n in js) {
         var mat = Note.fromJSON(n);
@@ -162,13 +161,9 @@ class MatDetailView extends GetView<MatController> {
                     Obx(() => SelectableText(controller.mat.value.title,
                         style:
                             Get.textTheme.headline3?.copyWith(fontSize: 40))),
-                    isWideScreen
-                        ? const SizedBox(height: 30)
-                        : ElevatedButton(
-                            onPressed: () => showNotesSheet(context),
-                            child: const Text("查看笔记")),
+                    const SizedBox(height: 30),
                     // 素材内容
-                    Obx(() => buildMatContentView()),
+                    Obx(() => buildMatContentView(context)),
                   ],
                 ),
               ),
@@ -190,7 +185,7 @@ class MatDetailView extends GetView<MatController> {
     );
   }
 
-  Widget buildMatContentView() {
+  Widget buildMatContentView(BuildContext context) {
     var lines = controller.mat.value.content.split('\n');
     var style = Get.textTheme.headline4
         ?.copyWith(height: 2, fontSize: 24, fontWeight: FontWeight.w500);
@@ -206,7 +201,7 @@ class MatDetailView extends GetView<MatController> {
           return TextSpan(
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                selectSentence(linenum, ln);
+                selectSentence(linenum, ln, context);
               },
             text: index < lines.length - 1 ? '$ln\n' : ln,
             style: controller.linenumSelected.value == linenum
@@ -220,7 +215,6 @@ class MatDetailView extends GetView<MatController> {
       },
       onSelectionChanged: (TextSelection selection, cause) {
         log("select pos: $selection");
-        if (selection.isCollapsed) return;
         final text = selection.textInside(controller.mat.value.content);
         log("selection: $text");
       },
@@ -232,16 +226,18 @@ class MatDetailView extends GetView<MatController> {
         context: context, builder: (context) => const NotesView());
   }
 
-  void selectSentence(int index, String line) {
+  void selectSentence(int index, String line, BuildContext context) {
     log("selecting line: $index:$line");
     controller.selectLine(index);
+
+    // 选择一句话之后，弹出其笔记窗口（如果该语句有对应的笔记的话）。
+
+    if (!PlatformController.isWideScreen(context)) showNotesSheet(context);
   }
 }
 
 class NotesView extends StatelessWidget {
-  const NotesView({
-    Key? key,
-  }) : super(key: key);
+  const NotesView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -250,30 +246,55 @@ class NotesView extends StatelessWidget {
         automaticallyImplyLeading: false,
         centerTitle: true,
         title: Text("笔记", style: Get.textTheme.headline5),
-        actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))
-        ],
       ),
-      body: Center(
-        child: Column(
-          children: [
-            Obx(() => Column(
-                  children: [
-                    for (Note n in MatController.to.notes) Text(n.content),
-                  ],
-                ))
-          ],
-        ),
-      ),
+      body: Obx(() => Column(
+            children: [
+              for (Note n in MatController.to.notes) NoteCard(n),
+            ],
+          )),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        tooltip: '添加笔记',
-        backgroundColor: YanxingThemeData.yanxingBlue10,
-        child: const Icon(
-          Icons.add,
-          color: YanxingThemeData.yanxingBlue1,
-        ),
-        onPressed: () {},
+      floatingActionButton: const StickyFab(
+        child: Center(child: Text("TODO: Note Editor")),
+      ),
+    );
+  }
+}
+
+class NoteCard extends StatelessWidget {
+  final Note note;
+
+  const NoteCard(this.note, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.all(20),
+      decoration: const BoxDecoration(
+        border:
+            Border(bottom: BorderSide(color: YanxingThemeData.yanxingBlue3)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(note.content),
+          Row(
+            children: [
+              const Spacer(),
+              const Text(
+                "—— 读者",
+                style: TextStyle(fontSize: 14, color: Colors.blueGrey),
+              ),
+              IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.edit,
+                    size: 16,
+                    color: Colors.blueGrey,
+                  )),
+            ],
+          )
+        ],
       ),
     );
   }

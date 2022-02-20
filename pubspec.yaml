@@ -44,7 +44,10 @@ dependencies:
   google_fonts: ^2.0.0
   json_annotation: ^4.4.0
   collection: ^1.15.0
+  jwt_decoder: ^2.0.1
+  flutter_secure_storage: ^5.0.2
   ruby_text: ^3.0.1
+
 
 dev_dependencies:
   flutter_test:

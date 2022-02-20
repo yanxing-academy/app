@@ -1,11 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:yanxing_app/routes.dart';
-import 'package:yanxing_app/views/author.dart';
-import 'package:yanxing_app/views/library.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
+
+import 'routes.dart';
 import 'themes/theme_data.dart';
+import 'views/author.dart';
 import 'views/home.dart';
+import 'views/library.dart';
+import 'views/login.dart';
 import 'views/mat.dart';
 import 'views/profile.dart';
 import 'views/root.dart';
@@ -29,6 +33,10 @@ void main() {
           preventDuplicates: true,
           children: [
             GetPage(
+                name: Paths.LOGIN,
+                page: () => LoginView(),
+                bindings: [LoginBinding()]),
+            GetPage(
                 preventDuplicates: true,
                 name: Paths.HOME,
                 page: () => const HomeView(),
@@ -47,7 +55,7 @@ void main() {
                   ),
                   GetPage(
                     name: Paths.PROFILE,
-                    page: () => ProfileView(),
+                    page: () => const ProfileView(),
                     bindings: [ProfileBinding()],
                   ),
                   GetPage(
@@ -73,43 +81,20 @@ void main() {
   );
 }
 
-/*
-class MainController extends GetxController {
-  static MainController get to => Get.find();
-  String host = "localhost:8080";
+class MainService extends GetxService {
+  static MainService get to => MainService();
+  final secureStorage = const FlutterSecureStorage();
 
-  int menuIdx = 0;
-  List<Mat> mats = [];
-  late Author author;
-
-  @override
-  void onInit() {
-    if (GetPlatform.isAndroid) {
-      host = "10.0.2.2:8080";
-    }
-    // log("<> Start fetching books....");
-    // fetchBooks();
-    super.onInit();
-  }
-
-  void fetchBooks() async {
-    log("fetching books...");
-    var url = "http://$host/api/v1/mats/search?limit=9&offset=0&o=t&k=6";
-    final resp = await http.get(Uri.parse(url));
-
-    if (resp.statusCode == 200) {
-      final js = jsonDecode(resp.body);
-      for (var m in js['mats']) {
-        var mat = Mat.fromJSON(m);
-        mats.add(mat);
-      }
-      update();
+  get jwtToken async {
+    final jwt = await secureStorage.read(key: 'jwt');
+    if (jwt != null) {
+      final map = json.decode(jwt);
+      return map['token'];
     } else {
-      throw Exception('Failed to load books');
+      return '';
     }
   }
 }
-*/
 
 class PlatformController extends GetxController {
   static PlatformController get to => PlatformController();
