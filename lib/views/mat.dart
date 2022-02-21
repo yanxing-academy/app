@@ -72,13 +72,13 @@ class MatCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       // color: const Color(0xFFFBFBFB),
-      color: YanxingThemeData.yanxingBlue1,
+      color: Get.theme.colorScheme.background, //YanxingThemeData.yanxingBlue1,
       shape: RoundedRectangleBorder(
         side: const BorderSide(color: YanxingThemeData.yanxingBlue3),
         borderRadius: BorderRadius.circular(10),
       ),
       // shadowColor: const Color(0xFFE6E6E6),
-      shadowColor: YanxingThemeData.yanxingBlue4,
+      shadowColor: Get.theme.colorScheme.shadow,
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -90,8 +90,7 @@ class MatCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 TextButton(
-                  child: Text(mat.title,
-                      style: Theme.of(context).textTheme.headline4),
+                  child: Text(mat.title, style: Get.textTheme.headline4),
                   onPressed: () {
                     log("going to mat view for mat ${mat.title}");
                     context.navigation.toNamed(Routes.VIEW_MAT, arguments: mat);

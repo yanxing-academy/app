@@ -5,7 +5,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 
 import 'routes.dart';
-import 'themes/theme_data.dart';
 import 'views/author.dart';
 import 'views/home.dart';
 import 'views/library.dart';
@@ -20,8 +19,9 @@ void main() {
   runApp(
     GetMaterialApp(
       title: "衍星书院",
-      theme: YanxingThemeData.lightThemeData,
-      darkTheme: YanxingThemeData.darkThemeData,
+      theme: ThemeData.light(), //YanxingThemeData.lightThemeData,
+      darkTheme: ThemeData.dark(), //YanxingThemeData.darkThemeData,
+      themeMode: ThemeMode.dark,
       initialBinding: BindingsBuilder(() {}),
       initialRoute: Routes.HOME,
       getPages: [

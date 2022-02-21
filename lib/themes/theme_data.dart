@@ -116,9 +116,9 @@ class YanxingThemeData {
     caption: GoogleFonts.oswald(fontWeight: _semiBold, fontSize: 16.0),
     subtitle1: GoogleFonts.montserrat(fontWeight: _medium, fontSize: 16.0),
     overline: GoogleFonts.montserrat(fontWeight: _medium, fontSize: 12.0),
-    bodyText1: GoogleFonts.montserrat(fontWeight: _regular, fontSize: 14.0),
-    subtitle2: GoogleFonts.montserrat(fontWeight: _medium, fontSize: 14.0),
-    bodyText2: GoogleFonts.montserrat(fontWeight: _regular, fontSize: 16.0),
-    button: GoogleFonts.montserrat(fontWeight: _semiBold, fontSize: 14.0),
+    bodyText1: GoogleFonts.roboto(fontWeight: _regular, fontSize: 14.0),
+    subtitle2: GoogleFonts.roboto(fontWeight: _medium, fontSize: 14.0),
+    bodyText2: GoogleFonts.roboto(fontWeight: _regular, fontSize: 16.0),
+    button: GoogleFonts.roboto(fontWeight: _semiBold, fontSize: 14.0),
   );
 }
